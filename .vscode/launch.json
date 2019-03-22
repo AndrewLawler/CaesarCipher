@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Rotate",
+            "request": "launch",
+            "mainClass": "Rotate"
+        }
+    ]
+}
