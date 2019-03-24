@@ -4,14 +4,35 @@ public class Caesar implements RotationCipher {
         
         int len =  s.length();
         char[] Text = new char[len];
+        char ch;
 
+        if(n<0){
+            n = 26+n;
+        }
+        
         for (int i=0; i<s.length(); i++){ 
-            if (Character.isUpperCase(s.charAt(i))){ 
-                char ch = (char)(((int)s.charAt(i) + n - 65) % 26 + 65); 
+            // need better way of doing this
+
+            if(s.charAt(i) == ' '){
+                Text[i] = ' ';
+            }
+            else if(s.charAt(i)== '.'){
+                Text[i] = '.';
+            }
+            else if(s.charAt(i)== ','){
+                Text[i] = ',';
+            }
+            else if(s.charAt(i)== '!'){
+                Text[i] = '!';
+            }
+
+            // comment where i got this from
+            else if(Character.isUpperCase(s.charAt(i))){ 
+                ch = (char)(((int)s.charAt(i) + n - 65) % 26 + 65); 
                 Text[i] = ch;
             } 
             else{ 
-                char ch = (char)(((int)s.charAt(i) + n - 97) % 26 + 97); 
+                ch = (char)(((int)s.charAt(i) + n - 97) % 26 + 97); 
                 Text[i] = ch;
             } 
         } 
@@ -22,42 +43,55 @@ public class Caesar implements RotationCipher {
     }
 
     public String decipher(String s){
-        double[] closeness = new double[26];
 
-        for(int i=0; i<=25; i++){
+        System.out.println("working");
+        
+        double[] closeness = new double[27];
+
+        for(int i=0; i<=26; i++){
             closeness[i] = 0;
         }
 
-        for(int i=0; i<=25; i++){
-            String x = rotate(s, i+1);
+        String x = "";
+
+        for(int i=1; i<=26; i++){
+            x = rotate(s, i);
             double[] freq = frequencies(x);
             double y = chiSquared(freq);
             closeness[i] = y;
         }
 
-        double smallest = closeness[0];
-        int smallestIndex = 0;
+        double smallest = closeness[1];
+        int smallestIndex = 1;
 
-        for(int i=0; i<=25; i++){
+        for(int i=1; i<=26; i++){
             if(closeness[i]<smallest){
                 smallest = closeness[i];
                 smallestIndex = i;
             }
         }
 
-        String RealText = rotate(s, smallestIndex+1);
+        String RealText = rotate(s, smallestIndex);
         return RealText;
+
     }
 
     public double[] frequencies(String s){
+
+        String x = s.toLowerCase();        
         double[] letters = new double[26];
+
+        for(int i=0; i<=25; i++){
+            letters[i] = 0;
+        }
+
         int len = s.length();
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
         for(int i=0; i<len; i++){
             for(int k=0; k<=25; k++){
-                if(s.charAt(i) == alphabet[k]){
-                    letters[i]++;
+                if(x.charAt(i) == alphabet[k]){
+                    letters[k]++;
                 }
             }
         }
@@ -70,9 +104,11 @@ public class Caesar implements RotationCipher {
     }
 
     public double chiSquared(double[] letters){
+
         double total = 0;
         double second;
         double first;
+        double third;
 
         double[] knownFreq = {
             0.0855, 0.0160, 0.0316, 0.0387, 0.1210,
@@ -84,16 +120,26 @@ public class Caesar implements RotationCipher {
         
         for(int i=0; i<=25; i++){
             first = letters[i]-knownFreq[i];
-            // System.out.println("first"+first);
-            // System.out.println(knownFreq[i]);
-            // System.out.println(letters[i]);
             second = first*first;
-            total = total + (second/knownFreq[i]);
-            // System.out.println(second);
-            // System.out.println(total);
-        }
+            third = (second/knownFreq[i]);
+            total = total + third;
 
+            /*
+            if(letters[i]==0){
+                total = total + 0;
+            }
+            else{
+                first = letters[i]-knownFreq[i];
+                second = first*first;
+                third = (second/knownFreq[i]);
+                total = total + third;
+            }
+            */
+        }
+        
+        System.out.println(total);
         return total;
+
     }
 
 }
