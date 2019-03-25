@@ -20,33 +20,24 @@ public class Caesar implements RotationCipher {
         
         // for loop for chaning all new letters
         for (int i=0; i<s.length(); i++){ 
-            // need better way of doing this
-            if(s.charAt(i) == ' '){
-                Text[i] = ' ';
+            if(Character.isLetter(s.charAt(i))){
+                // these lines where inspired and modified from: https://www.geeksforgeeks.org/caesar-cipher/
+                // if character is an upper case character at s(i)
+                if(Character.isUpperCase(s.charAt(i))){ 
+                    // ch = int(s(i) + n-65) % 26+65 converted to char. This is the formula for rotating a string by position n.
+                    ch = (char)(((int)s.charAt(i) + n - 65) % 26 + 65); 
+                    Text[i] = ch;
+                } 
+                else{ 
+                    // same as above but for lower case letters, this formula follows the exact same pattern.
+                    ch = (char)(((int)s.charAt(i) + n - 97) % 26 + 97); 
+                    Text[i] = ch;
+                } 
             }
-            else if(s.charAt(i)== '.'){
-                Text[i] = '.';
+            else{
+                Text[i] = s.charAt(i);
             }
-            else if(s.charAt(i)== ','){
-                Text[i] = ',';
-            }
-            else if(s.charAt(i)== '!'){
-                Text[i] = '!';
-            }
-
-            // these lines where inspired and modified from: https://www.geeksforgeeks.org/caesar-cipher/
-
-            // if character is an upper case character at s(i)
-            else if(Character.isUpperCase(s.charAt(i))){ 
-                // ch = int(s(i) + n-65) % 26+65 converted to char. This is the formula for rotating a string by position n.
-                ch = (char)(((int)s.charAt(i) + n - 65) % 26 + 65); 
-                Text[i] = ch;
-            } 
-            else{ 
-                // same as above but for lower case letters, this formula follows the exact same pattern.
-                ch = (char)(((int)s.charAt(i) + n - 97) % 26 + 97); 
-                Text[i] = ch;
-            } 
+            
         } 
 
         // creating String with char array text, returing it.
