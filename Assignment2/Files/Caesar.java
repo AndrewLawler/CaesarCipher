@@ -1,18 +1,26 @@
 public class Caesar implements RotationCipher {
 
+    // main rotate method.
+
     public String rotate(String s, int n){
         
+        // Attributes for this, including length of the input, the char text array and the char itself.
+
         int len =  s.length();
         char[] Text = new char[len];
         char ch;
+
+        /* if the rotation is less than 0. we add the number to 0.
+        eg: -2 = 26+-2 = 24 so we rotate 24 which is the same as taking 2 off of the string.
+        */
 
         if(n<0){
             n = 26+n;
         }
         
+        // for loop for chaning all new letters
         for (int i=0; i<s.length(); i++){ 
             // need better way of doing this
-
             if(s.charAt(i) == ' '){
                 Text[i] = ' ';
             }
@@ -26,17 +34,22 @@ public class Caesar implements RotationCipher {
                 Text[i] = '!';
             }
 
-            // comment where i got this from
+            // these lines where inspired and modified from: https://www.geeksforgeeks.org/caesar-cipher/
+
+            // if character is an upper case character at s(i)
             else if(Character.isUpperCase(s.charAt(i))){ 
+                // ch = int(s(i) + n-65) % 26+65 converted to char. This is the formula for rotating a string by position n.
                 ch = (char)(((int)s.charAt(i) + n - 65) % 26 + 65); 
                 Text[i] = ch;
             } 
             else{ 
+                // same as above but for lower case letters, this formula follows the exact same pattern.
                 ch = (char)(((int)s.charAt(i) + n - 97) % 26 + 97); 
                 Text[i] = ch;
             } 
         } 
 
+        // creating String with char array text, returing it.
         String Answer = new String(Text);
         return Answer;
 
@@ -44,15 +57,19 @@ public class Caesar implements RotationCipher {
 
     public String decipher(String s){
 
-        System.out.println("working");
-        
+        // initialising closeness array
+
         double[] closeness = new double[27];
 
+        // Making the array all 0's
         for(int i=0; i<=26; i++){
             closeness[i] = 0;
         }
 
         String x = "";
+
+        /* Looping through all possible rotations and storing their chiSquared value inside the
+        position for the rotation inside the closeness array */
 
         for(int i=1; i<=26; i++){
             x = rotate(s, i);
@@ -61,6 +78,7 @@ public class Caesar implements RotationCipher {
             closeness[i] = y;
         }
 
+        // Looping to find the smallest number in the closeness array, setting the smallestIndex to the index of this number.
         double smallest = closeness[1];
         int smallestIndex = 1;
 
@@ -71,6 +89,10 @@ public class Caesar implements RotationCipher {
             }
         }
 
+        // the index is the rotation we need.
+
+        // rotate and calculate the decoded string.
+
         String RealText = rotate(s, smallestIndex);
         return RealText;
 
@@ -78,24 +100,32 @@ public class Caesar implements RotationCipher {
 
     public double[] frequencies(String s){
 
+        // convert to lower case so we dont have any issues.
         String x = s.toLowerCase();        
+        // create letters array
         double[] letters = new double[26];
 
+        // make all of letters array 0.
         for(int i=0; i<=25; i++){
             letters[i] = 0;
         }
 
+        // set len to the length of the string
         int len = s.length();
+        // initialise a char alphabet array.
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
+        // loop the string values against the alphabet values and find when they match.
         for(int i=0; i<len; i++){
             for(int k=0; k<=25; k++){
+                // add one to the corresponding letters array position if letters(i)==alphabet(i)
                 if(x.charAt(i) == alphabet[k]){
                     letters[k]++;
                 }
             }
         }
 
+        // loop again to divide every value by the amount of numbers in the string
         for(int i=0; i<=25; i++){
             letters[i] = letters[i]/len;
         }
@@ -105,10 +135,14 @@ public class Caesar implements RotationCipher {
 
     public double chiSquared(double[] letters){
 
+        // Attributes needed for this method.
+
         double total = 0;
         double second;
         double first;
         double third;
+
+        // English letter frequencies
 
         double[] knownFreq = {
             0.0855, 0.0160, 0.0316, 0.0387, 0.1210,
@@ -118,26 +152,19 @@ public class Caesar implements RotationCipher {
             0.0268, 0.0106, 0.0183, 0.0019, 0.0172,
             0.0011};
         
+        /* loop to run 25 times, completes equation on every rotation using the letter frequencies. 
+        
+        (letter(i)-english(i))^2/english(i),
+
+        this is how we calculate the chiSquared value */
         for(int i=0; i<=25; i++){
             first = letters[i]-knownFreq[i];
             second = first*first;
             third = (second/knownFreq[i]);
+            // adding up the total for the value
             total = total + third;
-
-            /*
-            if(letters[i]==0){
-                total = total + 0;
-            }
-            else{
-                first = letters[i]-knownFreq[i];
-                second = first*first;
-                third = (second/knownFreq[i]);
-                total = total + third;
-            }
-            */
         }
         
-        System.out.println(total);
         return total;
 
     }
