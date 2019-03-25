@@ -35,7 +35,7 @@ public class BreakCaesar extends Caesar {
             }
         }
         else {
-            System.out.println("Wrong amount of inputs");
+            System.out.println("Wrong input length!");
         }
 
         // create new object of this class
