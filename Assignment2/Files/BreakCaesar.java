@@ -1,3 +1,16 @@
+/**
+ * A class running the decipher method
+ * Takes input from user using command line arguments and then runs it
+ * 
+ * arg[0] = first input
+ * arg[1] = second input
+ * 
+ * @author Andrew Lawler
+ * @version JDK 11.0.1
+ * @see java BreakCaesar.main 
+ * 
+ */
+
 public class BreakCaesar extends Caesar {   
 
     // constructor to call main decipher method and pass in new parameters
@@ -34,8 +47,11 @@ public class BreakCaesar extends Caesar {
                 System.out.println("You did not enter a string!");
             }
         }
-        else {
-            System.out.println("Wrong input length!");
+        else if(args.length>1) {
+            System.out.println("Too many parameters!\nUsage: java BreakCaesar 'cipher text'");
+        }
+        else if(args.length<1){
+            System.out.println("Too few parameters!\nUsage: java BreakCaesar 'cipher text'");
         }
 
         // create new object of this class

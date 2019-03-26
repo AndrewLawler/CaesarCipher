@@ -1,3 +1,15 @@
+/**
+ * A class running the Rotate method
+ * Takes input from user using command line arguments and then runs it
+ * 
+ * arg[0] = first input
+ * 
+ * @author Andrew Lawler
+ * @version JDK 11.0.1
+ * @see java.awt.main 
+ * 
+ */
+
 public class Rotate extends Caesar {
     
     // constructor to call rotate method from main Caesar class.
@@ -59,8 +71,11 @@ public class Rotate extends Caesar {
                 System.out.println("Wrong inputs!");
             }
         }
-        else {
-            System.out.println("Wrong input length!");
+        else if(args.length>2) {
+            System.out.println("Too many parameters!\nUsage: java rotate n 'cipher text'");
+        }
+        else if(args.length<2){
+            System.out.println("Too few parameters!\nUsage: java rotate n 'cipher text'");
         }
 
         // create input

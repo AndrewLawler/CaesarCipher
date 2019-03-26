@@ -4,5 +4,5 @@ public interface RotationCipher {
     public String rotate(String s, int n);
     public String decipher(String s);
     public double[] frequencies(String s);
-    public double chiSquared(double[] letters);
+    public double chiSquared(double[] letters, double[] knownFreq);
 }
