@@ -1,17 +1,33 @@
+/**
+ * A class implementing the interface
+ *  
+ * INFO
+ * 
+ * @author Andrew Lawler
+ * @version JDK 11.0.1
+ * @see java BreakCaesar.main 
+ * 
+ */
+
 public class Caesar implements RotationCipher {
 
     // if you change the alphabet for a different language, just edit this.
     int alphabetlength = 26;
     char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    
+    // arrays used throughout
+    double[] letters = new double[alphabetlength];
+    double[] closeness = new double[alphabetlength+1];
 
     // main rotate method.
-
     public String rotate(String s, int n){
         
         // Attributes for this, including length of the input, the char text array and the char itself.
 
         int len =  s.length();
+        // new rotated char array
         char[] Text = new char[len];
+        // initialising ch
         char ch;
 
         /* if the rotation is less than 0. we add the number to 0.
@@ -23,30 +39,31 @@ public class Caesar implements RotationCipher {
         
         // for loop for chaning all new letters
         for (int i=0; i<s.length(); i++){ 
+            // check if the letter is a character
             if(Character.isLetter(s.charAt(i))){
-                // these lines where inspired and modified from: https://www.geeksforgeeks.org/caesar-cipher/
-                // if character is an upper case character at s(i)
+                // This if statement below was inspired and modified from: https://www.geeksforgeeks.org/caesar-cipher/
+                // if s is an upper case letter, do the calculation below
                 if(Character.isUpperCase(s.charAt(i))){ 
-                    // ch = int(s(i) + n-65) % 26+65 converted to char. This is the formula for rotating a string by position n.
+                    // ch = int(s(i) + n-65) % 26+65 converted to char. This is the formula for rotating an upper case character by position n.
                     ch = (char)(((int)s.charAt(i) + n - 65) % alphabetlength + 65); 
                     Text[i] = ch;
                 } 
+                // if character is not upper case, it must be lower case as we have confirmed it is a letter
                 else{ 
-                    // same as above but for lower case letters, this formula follows the exact same pattern.
+                    // same as above but modified for lower case letters, this formula follows the exact same pattern.
                     ch = (char)(((int)s.charAt(i) + n - 97) % alphabetlength + 97); 
                     Text[i] = ch;
                 } 
             }
+            // not a letter, must be a form of symbol/punctuation
             else{
                 Text[i] = s.charAt(i);
             }
             
         } 
-
         // creating String with char array text, returing it.
         String Answer = new String(Text);
         return Answer;
-
     }
 
     public String decipher(String s){
@@ -59,25 +76,13 @@ public class Caesar implements RotationCipher {
             0.0268, 0.0106, 0.0183, 0.0019, 0.0172,
             0.0011};
 
-        // initialising closeness array
-
-        double[] closeness = new double[alphabetlength+1];
-
-        // Making the array all 0's
-        for(int i=0; i<=alphabetlength; i++){
-            closeness[i] = 0;
-        }
-
-        String x = "";
-
         /* Looping through all possible rotations and storing their chiSquared value inside the
         position for the rotation inside the closeness array */
-
         for(int i=1; i<=alphabetlength; i++){
-            x = rotate(s, i);
+            String x = rotate(s, i);
             double[] freq = frequencies(x);
-            double y = chiSquared(freq, knownFreq);
-            closeness[i] = y;
+            double finalValue = chiSquared(freq, knownFreq);
+            closeness[i] = finalValue;
         }
 
         // Looping to find the smallest number in the closeness array, setting the smallestIndex to the index of this number.
@@ -91,10 +96,7 @@ public class Caesar implements RotationCipher {
             }
         }
 
-        // the index is the rotation we need.
-
-        // rotate and calculate the decoded string.
-
+        // the index is the rotation we need, rotate and calculate the decoded string.
         String RealText = rotate(s, smallestIndex);
         return RealText;
 
@@ -104,18 +106,8 @@ public class Caesar implements RotationCipher {
 
         // convert to lower case so we dont have any issues.
         String x = s.toLowerCase();        
-        // create letters array
-        double[] letters = new double[alphabetlength];
-
-        // make all of letters array 0.
-        for(int i=0; i<=alphabetlength-1; i++){
-            letters[i] = 0;
-        }
-
         // set len to the length of the string
         int len = s.length();
-        // initialise a char alphabet array.
-        //char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
         // loop the string values against the alphabet values and find when they match.
         for(int i=0; i<len; i++){
@@ -126,12 +118,10 @@ public class Caesar implements RotationCipher {
                 }
             }
         }
-
         // loop again to divide every value by the amount of numbers in the string
         for(int i=0; i<=alphabetlength-1; i++){
             letters[i] = letters[i]/len;
         }
-
         return letters;
     }
 
@@ -143,16 +133,18 @@ public class Caesar implements RotationCipher {
         double second;
         double first;
         double third;
-        
+
         /* loop to run 26 times, completes equation on every rotation using the letter frequencies. 
         (letter(i)-english(i))^2/english(i),
         this is how we calculate the chiSquared value */
         for(int i=0; i<=alphabetlength-1; i++){
-            first = letters[i]-knownFreq[i];
+            /*first = letters[i]-knownFreq[i];
             second = first*first;
             third = (second/knownFreq[i]);
-            // adding up the total for the value
-            total = total + third;
+            total = total + third;*/
+            // shorter version
+            first = Math.pow(letters[i]-knownFreq[i], 2);
+            total = total + (first/knownFreq[i]);
         }
         
         return total;
