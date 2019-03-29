@@ -8,7 +8,7 @@
 public interface RotationCipher {
     // Initialising the public (abstract) methods
     public String rotate(String s, int n);
-    public String decipher(String s);
-    public double[] frequencies(String s);
+    public String decipher(String jumbledText);
+    public double[] frequencies(String plainText);
     public double chiSquared(double[] letters, double[] knownFreq);
 }

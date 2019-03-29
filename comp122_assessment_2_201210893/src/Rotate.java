@@ -19,11 +19,11 @@ public class Rotate extends Caesar {
      * 
      * Rotate simply takes the inputs and calles the rotate method with the inputs as parameters
      * 
-     * @param s represents the String inputted by the user
-     * @param x represents the rotation value inputted by the user
+     * @param plainText represents the String inputted by the user
+     * @param Rotate represents the rotation value inputted by the user
      */
-    public Rotate(String s, int x){
-        System.out.println(rotate(s, x));
+    public Rotate(String plainText, int Rotate){
+        System.out.println(rotate(plainText, Rotate));
     }
     
     /**

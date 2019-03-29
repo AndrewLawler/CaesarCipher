@@ -74,10 +74,10 @@ public class Caesar implements RotationCipher {
      * This method is completely responsibe for deciphering a string input. It first takes the string and rotates it for every possible rotation. 
      * It then compares the frequencies by sending them to the chiSquared method. 
      * 
-     * @param s represents the string taken in as an input, this string is then deciphered
+     * @param jumbledText represents the string taken in as an input, this string is then deciphered
      * @return we simply return the deciphered string 
      */
-    public String decipher(String s){
+    public String decipher(String jumbledText){
         // frequencies for the language we are using, in this case its English
         double[] knownFreq = {
             0.0855, 0.0160, 0.0316, 0.0387, 0.1210,
@@ -89,10 +89,8 @@ public class Caesar implements RotationCipher {
 
         // Looping through all possible rotations of the string and then using frequencies and chiSquared to find out if its close to English or not 
         for(int i=1; i<=alphabetlength; i++){
-            String x = rotate(s, i);
-            //double[] freq = frequencies(x);
-            //closeness[i] = chiSquared(freq, knownFreq);
-            closeness[i] = chiSquared(frequencies(x), knownFreq);
+            String Rotated = rotate(jumbledText, i);
+            closeness[i] = chiSquared(frequencies(Rotated), knownFreq);
         }
 
         // Smallest number will be the closest to English, we will find its index
@@ -107,7 +105,7 @@ public class Caesar implements RotationCipher {
         }
 
         // the index is the desired rotation which will allow us to get back to english, we then use this
-        String RealText = rotate(s, smallestIndex);
+        String RealText = rotate(jumbledText, smallestIndex);
         return RealText;
 
     }
@@ -117,21 +115,21 @@ public class Caesar implements RotationCipher {
      * 
      * This method is responsible for taking a string input and returning a double[] of its frequencies for every letter.
      * 
-     * @param s represents the String we take as an input (the string we are finding the frequencies for)
+     * @param plainText represents the String we take as an input (the string we are finding the frequencies for)
      * @return returns the strings frequencies as a double[]
      */
-    public double[] frequencies(String s){
+    public double[] frequencies(String plainText){
 
         // convert to lower case so we dont have any issues comparing it to alphabet array
-        String x = s.toLowerCase();        
+        String plainTextlower = plainText.toLowerCase();        
         // len = length of the string
-        int len = s.length();
+        int len = plainText.length();
 
         // loop the string values against the alphabet values and find when they match.
         for(int i=0; i<len; i++){
             for(int k=0; k<=alphabetlength-1; k++){
                 // add one to the corresponding letters array position if letters(i)==alphabet(i). / eg: if x.charAt(i)==a, letters[0]++;
-                if(x.charAt(i) == alphabet[k]){
+                if(plainTextlower.charAt(i) == alphabet[k]){
                     letters[k]++;
                 }
             }

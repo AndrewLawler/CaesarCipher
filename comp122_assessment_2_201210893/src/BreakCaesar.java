@@ -14,10 +14,10 @@ public class BreakCaesar extends Caesar {
 
    /**
     * constructor simply calls decipher with the string we have
-    * @param s represents the string inputted
+    * @param jumbledText represents the string inputted
     */
-    public BreakCaesar(String s){
-        System.out.println(decipher(s));
+    public BreakCaesar(String jumbledText){
+        System.out.println(decipher(jumbledText));
     }
     
     /**
