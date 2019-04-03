@@ -1,7 +1,6 @@
 /**
  * A class running the decipher method
- * BreakCaesar also extends Caesar as we use methods from that class
- * Takes input from user using command line arguments and then runs it
+ * Takes input from user using command line arguments and then creates a caeser object and runs the decipher method
  * 
  * arg[0] = String
  * 
@@ -10,16 +9,8 @@
  * 
  */
 
-public class BreakCaesar extends Caesar {   
+public class BreakCaesar {   
 
-   /**
-    * constructor simply calls decipher with the string we have
-    * @param jumbledText represents the string inputted
-    */
-    public BreakCaesar(String jumbledText){
-        System.out.println(decipher(jumbledText));
-    }
-    
     /**
      * main simply validates the input using try{} catch{} blocks
      * @param args we use command line inputs for this program, therefore we refer to args0
@@ -38,9 +29,11 @@ public class BreakCaesar extends Caesar {
                 // fail = String, this is what we want.
                 pass = true;
             }
-            // we have a String so create a new object of the class and decipher the String
+            // we have a String so create a new object of caesar and decipher the String
             if(pass==true){
-                BreakCaesar two = new BreakCaesar(args[0]);
+                Caesar two = new Caesar();
+                String Deciphered = two.decipher(args[0]);
+                System.out.println(Deciphered);
             }  
             // if we do not pass, you did not enter a string
             else{

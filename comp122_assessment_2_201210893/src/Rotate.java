@@ -1,7 +1,6 @@
 /**
  * A class taking the input and running the rotate method
- * Rotate also extends Caesar as we use methods from that class
- * Takes input from user using command line arguments and then runs the rotate method on it
+ * Takes input from user using command line arguments and then runs the rotate method on it using a caesar object
  * 
  * arg[0] = Rotation
  * arg[1] = String
@@ -11,26 +10,14 @@
  * 
  */
 
-// implements RotationCipher?
-public class Rotate extends Caesar {
+public class Rotate {
     
     /**
-     * Rotate
-     * 
-     * Rotate simply takes the inputs and calles the rotate method with the inputs as parameters
-     * 
-     * @param plainText represents the String inputted by the user
-     * @param Rotate represents the rotation value inputted by the user
-     */
-    public Rotate(String plainText, int Rotate){
-        System.out.println(rotate(plainText, Rotate));
-    }
-    
-    /**
-     * main simply handle the validation for the application
+     * main simply handles the validation for the application
      * 
      * @param args we need args becaue we use command line arguments for this program
      */
+    
     public static void main(String[] args){
     
         // pass is the boolean for the String
@@ -66,9 +53,12 @@ public class Rotate extends Caesar {
             if(pass==false){
                 System.out.println("You did not enter a String second!\nUsage: java rotate n 'cipher text'");
             }
-            // if first is an integer & the second is a string we can create a Rotate object using the inputs
+            // if first is an integer & the second is a string we can use the rotate method
             if(pass==true && pass2==true){
-                Rotate one = new Rotate(textInput, number_of_rotations);
+                // creates a new Caesar object so we can use it's methods
+                Caesar Rotating = new Caesar();
+                String converted = Rotating.rotate(textInput, number_of_rotations);
+                System.out.println(converted);
             }
         }
         // if we have more than two inputs, we have too many
